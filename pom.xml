@@ -6,12 +6,20 @@
 
     <groupId>com.vulcanth.nyel</groupId>
     <artifactId>VulcanthPunish</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-    
+    <dependencies>
+    <dependency>
+        <groupId>org.projectlombok</groupId>
+        <artifactId>lombok</artifactId>
+        <version>1.18.12</version>
+        <scope>provided</scope>
+    </dependency>
+</dependencies>
+
 </project>

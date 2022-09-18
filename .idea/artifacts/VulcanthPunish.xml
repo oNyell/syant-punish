@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="VulcanthPunish">
+    <output-path>$PROJECT_DIR$/out/artifacts/VulcanthPunish</output-path>
+    <root id="archive" name="VulcanthPunish.jar">
+      <element id="module-output" name="VulcanthPunish" />
+    </root>
+  </artifact>
+</component>
