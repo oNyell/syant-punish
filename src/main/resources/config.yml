@@ -1,0 +1,8 @@
+database:
+  tipo: 'mysql'
+  mysql:
+    host: '127.0.0.1'
+    porta: '3306'
+    nome: 'vulcanth'
+    usuario: 'root'
+    senha: ''
