@@ -27,7 +27,7 @@ public class PunirCommand extends Commands {
         super("punir");
     }
 
-    private String webhookURL = "https://discord.com/api/webhooks/1020901829187485707/Rg592u4mZjHRo7X-1OWqhLHmC6KhC-V0V5pfjIcRpwoGKQD9aPd_YpZO2_Q-PCl8os9a";
+    private String webhookURL = "https://discord.com/api/webhooks/1005663639967121518/xlXHMJauZYeJNrac5XbVHiUt4S2mijPi4e_VdOmDLJ2_bXBjeU0aomZoq97YPF_XlA-B";
     SimpleDateFormat SDF = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
     private static PunishDao punishDao;
 
@@ -48,8 +48,11 @@ public class PunirCommand extends Commands {
             sender.sendMessage(TextComponent.fromLegacyText("§cUso incorreto, use /punir <player> e selecione o motivo."));
             return;
         }
+        ProxiedPlayer target = ProxyServer.getInstance().getPlayer(args[0]);
+
         if (args.length == 1) {
             String targetName = args[0];
+
 
             if (targetName.equals(sender.getName())) {
                 sender.sendMessage(TextComponent.fromLegacyText("§cVocê não pode se punir."));
@@ -57,6 +60,14 @@ public class PunirCommand extends Commands {
             }
             if (impossibleToBan(targetName)) {
                 sender.sendMessage(TextComponent.fromLegacyText("§cVocê não pode punir este jogador."));
+                return;
+            }
+            if (target == null) {
+                sender.sendMessage(TextComponent.fromLegacyText("§cEste usuário não se encontra online"));
+                return;
+            }
+            if (target.hasPermission("vulcanth.cmd.punir")) {
+                sender.sendMessage(TextComponent.fromLegacyText("§cVocê não pode punir um membro da equipe."));
                 return;
             }
             sender.sendMessage(TextComponent.fromLegacyText("§aSelecione o motivo por qual você deseja punir " + Role.getColored(targetName) + "§f:"));
@@ -67,7 +78,7 @@ public class PunirCommand extends Commands {
             for (Reason value : Reason.values()) {
                 String punishType = value.getPunishType().name().replace("TEMP", "");
 
-                if (sender.hasPermission("ayane.punish." + punishType.toLowerCase())) {
+                if (sender.hasPermission("vulcanth.punir." + punishType.toLowerCase())) {
                     TextComponent text = new TextComponent((a ? "§f" : "§7") + value.getText());
                     String rank;
 
@@ -121,7 +132,7 @@ public class PunirCommand extends Commands {
                                     .setColor(Color.decode("#FFAA00"))
                                     .addField("Usuário:", targetName, true)
                                     .addField("Motivo:", reason.getText(), true)
-                                    .addField("Duração:", reason.getTime() > 0 ? Util.fromLongWithoutDiff(reason.getTime()) : "Permanente", false)
+                                    .addField("Duração:", reason.getTime() == 0 ? "Permanente" : Util.fromLongWithoutDiff(System.currentTimeMillis() + reason.getTime()), false)
                                     .addField("Expira em:", reason.getTime() == 0 ? "Nunca" : SDF.format(System.currentTimeMillis() + reason.getTime()), true)
                                     .addField("Provas:", "Nenhuma", true)
                     );
@@ -165,7 +176,7 @@ public class PunirCommand extends Commands {
                 }
             }
 
-            if (sender.hasPermission("ayane.punish." + reason.getPunishType().name().replace("TEMP", "").toLowerCase())) {
+            if (sender.hasPermission("vulcanth.punir." + reason.getPunishType().name().replace("TEMP", "").toLowerCase())) {
                 if (punishDao.getPunishService().getPunishes().stream().filter(punish -> punish.getPlayerName().equalsIgnoreCase(targetName)).filter(punish -> punish.getReason() == reason).noneMatch(Punish::isLocked)) {
                     apply(punishDao.createPunish(targetName, sender.getName(), reason, proof, reason.getPunishType().getText()), ProxyServer.getInstance().getPlayer(targetName), sender.getName());
                     Webhook webhook = new Webhook(webhookURL);
@@ -274,7 +285,7 @@ public class PunirCommand extends Commands {
     }
 
     private static boolean impossibleToBan(String nickName) {
-        return Stream.of("NyellPlay", "oPewdBR", "_KyuraKing_").anyMatch(s -> s.equalsIgnoreCase(nickName));
+        return Stream.of("NyellPlay", "_ImZaskie_").anyMatch(s -> s.equalsIgnoreCase(nickName));
     }
 }
 

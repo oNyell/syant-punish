@@ -2,6 +2,7 @@ package dev.vulcanth.nyel.gerementions.commands.cmd;
 
 import dev.vulcanth.nyel.gerementions.commands.Commands;
 import dev.vulcanth.nyel.player.role.Role;
+import dev.vulcanth.nyel.utils.StringUtils;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -23,7 +24,7 @@ public class KickCommand extends Commands {
 
 
     private static boolean impossibleToBan(String nickName) {
-        return Stream.of("NyellPlay", "_KyuraKing_").anyMatch(s -> s.equalsIgnoreCase(nickName));
+        return Stream.of("NyellPlay").anyMatch(s -> s.equalsIgnoreCase(nickName));
     }
 
     @Override
@@ -34,19 +35,14 @@ public class KickCommand extends Commands {
             return;
         }
 
-        if (args.length < 1) {
+        if (args.length == 0) {
             sender.sendMessage(TextComponent.fromLegacyText("§cUtilize /kick <player> <motivo>§c."));
             return;
         }
         ProxiedPlayer target = ProxyServer.getInstance().getPlayer(args[0]);
-        String reason = args[1];
-        if (reason == null) {
-            target.disconnect(TextComponent.fromLegacyText("§c§lVULCANTH\n\n§cVocê foi expulso da rede\n\n§cAutor da expulsão: §7" + sender.getName() + "\n§cMotivo da expulsão: " + "Não informado!" + "\n\n§cAcha que a punição foi aplicada injustamente?\n§cFaça uma revisão em nosso forum: §evulcanth.com/forum"));
-            sender.sendMessage(TextComponent.fromLegacyText("§cVocê expulsou o jogador " + Role.getColored(target.getName()) + " §cpor " + "Não informado" + "§c."));
-        }
-
+        String format = StringUtils.formatColors(StringUtils.join((Object[])args, " "));
         if (target == null) {
-            sender.sendMessage(TextComponent.fromLegacyText("§cO jogador §f" + args[0] + "§c não encontra-se presente."));
+            sender.sendMessage(TextComponent.fromLegacyText("§cO jogador " + args[0] + "§c não encontra-se presente."));
             return;
         }
 
@@ -54,8 +50,8 @@ public class KickCommand extends Commands {
             sender.sendMessage(TextComponent.fromLegacyText("§cVocê não pode kickar este jogador."));
             return;
         }
-        target.disconnect(TextComponent.fromLegacyText("§c§lSYANTMC\n\n§cVocê foi expulso da rede\n\n§cAutor da expulsão: §7" + sender.getName() + "\n§cMotivo da expulsão: " + reason + "\n\n§cAcha que a punição foi aplicada injustamente?\n§cFaça uma revisão acessando: §esyantmc.com/discord"));
-        sender.sendMessage(TextComponent.fromLegacyText("§cVocê expulsou o jogador " + Role.getColored(target.getName()) + "§a por §f" + reason + "§a."));
+        target.disconnect(TextComponent.fromLegacyText("§c§lVULCANTH\n\n§cVocê foi desconectado do servidor por §c" + sender.getName()));
+        sender.sendMessage(TextComponent.fromLegacyText("§cVocê expulsou o jogador " + Role.getColored(target.getName()) + "§c por §f" + format + "§a."));
 
     }
 }

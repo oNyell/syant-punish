@@ -62,7 +62,7 @@ public class PunishDao {
                 }
                 resultSet.close();
                 statement.close();
-                Main.getInstance().getLogger().info("§ePunições ativa com sucesso, bom trabalho vulcanth-sensei");
+                Main.getInstance().getLogger().info("§ePunições ativa com sucesso.");
             } catch (SQLException e) {
                 e.printStackTrace();
             }

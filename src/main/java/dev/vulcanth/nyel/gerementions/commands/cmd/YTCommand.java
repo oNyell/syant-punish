@@ -25,9 +25,8 @@ public class YTCommand extends Commands {
             for (String s : Main.getInstance().getProxy().getServers().keySet()) {
                 ServerInfo serverInfo = (ServerInfo)Main.getInstance().getProxy().getServers().get(s);
                 for (ProxiedPlayer todos : ProxyServer.getInstance().getPlayers()) {
-                    sender.sendMessage(TextComponent.fromLegacyText("§1"));
-                    sender.sendMessage(TextComponent.fromLegacyText("§f Parceiros online neste momento:"));
-                    if (todos.hasPermission("role.youtuber") || todos.hasPermission("role.streamer")) {
+                    sender.sendMessage(TextComponent.fromLegacyText("\n§e Parceiros online neste momento:"));
+                    if (todos.hasPermission("lista.youtube")) {
                         int che = 0;
 
                         if (todos.hasPermission("role.youtuber")) {
@@ -39,7 +38,8 @@ public class YTCommand extends Commands {
                             boolean tags = true;
                         }
                     } else {
-                        sender.sendMessage(TextComponent.fromLegacyText("§cNenhum parceiro online no momento."));
+                        sender.sendMessage(TextComponent.fromLegacyText("\n§cNenhum parceiro online no momento."));
+                        return;
                     }
                 }
             }
@@ -73,10 +73,10 @@ public class YTCommand extends Commands {
         String tag;
         switch (grup) {
             case "role.youtuber":
-                tag = "&c[YouTuber]";
+                tag = "§c[YouTuber]";
                 return tag;
             case "role.streamer":
-                tag = "&9[Streamer]";
+                tag = "§9[Streamer]";
                 return tag;
             default:
                 return null;

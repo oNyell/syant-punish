@@ -69,7 +69,7 @@ public class Listeners implements Listener {
                     player.sendMessage(TextComponent.fromLegacyText("\n§c* Você estará silenciado " + (punish.getReason().getTime() > 0 ? "por mais §7" + Util.fromLong(punish.getExpire()) : "para sempre") +
                             "\n\n§c* Motivo: " + punish.getReason().getText() + " - " + proof +
                             "\n§c* Autor: " + punish.getStafferName() +
-                            "\n§c* Use o id §e#" + punish.getId() + "§c para criar uma revisão em §n§csyantmc.com/discord" +
+                            "\n§c* Use o id §e#" + punish.getId() + " §cpara criar uma revisão em nosso forum §n§cvulcanth.com/forum" +
                             "\n"));
                 }
             });

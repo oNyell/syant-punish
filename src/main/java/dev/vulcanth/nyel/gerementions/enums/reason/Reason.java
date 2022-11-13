@@ -30,7 +30,8 @@ public enum Reason {
     COMERCIO("Comércio", PunishType.TEMPMUTE, TimeUnit.DAYS.toMillis(3)),
     SPAM("Spam", PunishType.TEMPMUTE, TimeUnit.HOURS.toMillis(1)),
     FLOOD("Flood", PunishType.TEMPMUTE, TimeUnit.HOURS.toMillis(5)),
-    CONVERSAEXPLICITA("Conversa explícita", PunishType.TEMPMUTE, TimeUnit.DAYS.toMillis(3));
+    CONVERSAEXPLICITA("Conversa explícita", PunishType.TEMPMUTE, TimeUnit.DAYS.toMillis(3)),
+    NENHUM("Não foi informado", PunishType.BAN, 0);
 
     private final String text;
     private final PunishType punishType;

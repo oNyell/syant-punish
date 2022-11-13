@@ -36,7 +36,7 @@ public class DespunirCommand extends Commands {
         }
 
         ProxiedPlayer player = (ProxiedPlayer) sender;
-        if (!player.hasPermission("vulcanth.cmd.unpunish")) {
+        if (!player.hasPermission("role.gerente")) {
             player.sendMessage(TextComponent.fromLegacyText("§fComando desconhecido."));
             return;
         }
