@@ -1,4 +1,4 @@
-package dev.vulcanth.nyel.gerementions.other.model;
+package dev.vulcanth.nyel.gerementions.model;
 
 import java.util.stream.Stream;
 

@@ -24,7 +24,7 @@ import java.util.stream.Stream;
 public class PunirCommand extends Commands {
 
     public PunirCommand() {
-        super("punir");
+        super("punir", "punish");
     }
 
     private String webhookURL = "https://discord.com/api/webhooks/1005663639967121518/xlXHMJauZYeJNrac5XbVHiUt4S2mijPi4e_VdOmDLJ2_bXBjeU0aomZoq97YPF_XlA-B";
@@ -121,7 +121,7 @@ public class PunirCommand extends Commands {
                 return;
             }
             if (sender.hasPermission("role.admin")) {
-                if (punishDao.getPunishService().getPunishes().stream().filter(punish -> punish.getPlayerName().equalsIgnoreCase(targetName)).filter(punish -> punish.getReason() == reason).noneMatch(Punish::isLocked)) {
+                if (punishDao.getPunishService().getPunishes().stream().filter(punish -> punish.getPlayerName().equalsIgnoreCase(targetName)).filter(punish -> punish.getReasona() == reason).noneMatch(Punish::isLocked)) {
                     apply(punishDao.createPunish(targetName, sender.getName(), reason, null, reason.getPunishType().name()), ProxyServer.getInstance().getPlayer(targetName), sender.getName());
                     
                     Webhook webhook = new Webhook(webhookURL);
@@ -177,7 +177,7 @@ public class PunirCommand extends Commands {
             }
 
             if (sender.hasPermission("vulcanth.punir." + reason.getPunishType().name().replace("TEMP", "").toLowerCase())) {
-                if (punishDao.getPunishService().getPunishes().stream().filter(punish -> punish.getPlayerName().equalsIgnoreCase(targetName)).filter(punish -> punish.getReason() == reason).noneMatch(Punish::isLocked)) {
+                if (punishDao.getPunishService().getPunishes().stream().filter(punish -> punish.getPlayerName().equalsIgnoreCase(targetName)).filter(punish -> punish.getReasona() == reason).noneMatch(Punish::isLocked)) {
                     apply(punishDao.createPunish(targetName, sender.getName(), reason, proof, reason.getPunishType().getText()), ProxyServer.getInstance().getPlayer(targetName), sender.getName());
                     Webhook webhook = new Webhook(webhookURL);
                     webhook.addEmbed(
@@ -210,7 +210,7 @@ public class PunirCommand extends Commands {
 
     private static void apply(Punish punish, ProxiedPlayer target, String staffer) {
         final String textString;
-        final Reason reason = punish.getReason();
+        final Reason reason = punish.getReasona();
         final String proof = (punish.getProof() == null ? "Nenhuma" : punish.getProof());
 
         switch (reason.getPunishType()) {

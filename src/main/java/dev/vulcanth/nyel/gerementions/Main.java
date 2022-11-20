@@ -3,7 +3,6 @@ package dev.vulcanth.nyel.gerementions;
 import dev.vulcanth.nyel.gerementions.commands.Commands;
 import dev.vulcanth.nyel.gerementions.listeners.Listeners;
 import dev.vulcanth.nyel.gerementions.thread.PunishThread;
-import dev.vulcanth.nyel.gerementions.other.database.Database;
 import dev.vulcanth.nyel.gerementions.punish.dao.PunishDao;
 import lombok.Getter;
 import net.md_5.bungee.api.plugin.Plugin;
@@ -33,7 +32,6 @@ public class Main extends Plugin {
         saveDefaultConfig();
         AtomicLong ms = new AtomicLong(System.currentTimeMillis());
 
-        Database.setupDatabase();
         punishThread = new PunishThread();
 
         punishDao = new PunishDao();
@@ -97,7 +95,6 @@ public class Main extends Plugin {
 
     public void onDisable() {
         punishThread.shutdown();
-        Database.getInstance().closeConnection();
 
         this.getLogger().info("§aPlugin desativado com sucesso.");
     }

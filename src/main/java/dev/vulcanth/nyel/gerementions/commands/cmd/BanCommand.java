@@ -26,7 +26,7 @@ public class BanCommand extends Commands {
             return;
         }
 
-        if (args.length != 2) {
+        if (args.length < 2) {
             sender.sendMessage(TextComponent.fromLegacyText("§cUtilize \"/ban <user> <duração> [motivo]"));
             return;
         }
@@ -37,10 +37,6 @@ public class BanCommand extends Commands {
             return;
         }
 
-        if (args.length < 1) {
-            sender.sendMessage(TextComponent.fromLegacyText("§cVocê digitou somente o nickname do acusado, favor completar com o motivo"));
-            return;
-        }
         String format = StringUtils.formatColors(StringUtils.join((Object[])args, " "));
         if (format == null) {
             sender.sendMessage(TextComponent.fromLegacyText("\n§eBanimento aplicado com sucesso."));

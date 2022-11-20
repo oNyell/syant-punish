@@ -53,7 +53,7 @@ public class DespunirCommand extends Commands {
 
         if (punishDao.getPunishService().getPunishes().stream().anyMatch(punish -> punish.getPlayerName().equalsIgnoreCase(target))) {
             punishDao.getPunishService().getPunishes().stream().filter(punish -> punish.getPlayerName().equalsIgnoreCase(target)).forEach(punish -> {
-                TextComponent text = new TextComponent("§7#" + punish.getId() + " §7- §f" + punish.getReason().getText());
+                TextComponent text = new TextComponent("§7#" + punish.getId() + " §7- §f" + punish.getReasona().getText());
                 text.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText("§eClique para revogar essa punição.")));
                 text.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/did " + punish.getId()));
 

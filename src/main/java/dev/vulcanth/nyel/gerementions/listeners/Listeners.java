@@ -30,8 +30,9 @@ public class Listeners implements Listener {
             event.setCancelled(true);
 
             String proof = (punish.getProof() == null ? "Indisponível" : punish.getProof());
+            String reason = (punish.getReason() == null ? "Motivo não informado" : punish.getReason());
             event.setCancelReason(TextComponent.fromLegacyText("§c§lVULCANTH\n\n§cVocê está banido permanentemente do servidor.\n" +
-                    "\n§cMotivo: " + punish.getReason().getText() + " - " + proof +
+                    "\n§cMotivo: " + reason + " - " + proof +
                     "\n§cAutor da punição: §7" + punish.getStafferName() +
                     "\n§cID da punição: §e#" + punish.getId() +
                     "\n\n§cUse o ID §e#" + punish.getId() + " §cpara criar uma revisão em nosso forum §n§cvulcanth.com/forum"));
@@ -48,6 +49,7 @@ public class Listeners implements Listener {
                 List<String> commands = Arrays.asList("/tell", "/g", "/r", "/.", "/l", "/p", "/s");
 
                 String proof = (punish.getProof() == null ? "Indisponível" : punish.getProof());
+                String reason = (punish.getReason() == null ? "Motivo não informado" : punish.getReason());
                 String message = event.getMessage();
 
                 if (event.isCommand()) {
@@ -66,8 +68,8 @@ public class Listeners implements Listener {
                 }
                 if (!player.getServer().getInfo().getName().equalsIgnoreCase("ss")) {
                     event.setCancelled(true);
-                    player.sendMessage(TextComponent.fromLegacyText("\n§c* Você estará silenciado " + (punish.getReason().getTime() > 0 ? "por mais §7" + Util.fromLong(punish.getExpire()) : "para sempre") +
-                            "\n\n§c* Motivo: " + punish.getReason().getText() + " - " + proof +
+                    player.sendMessage(TextComponent.fromLegacyText("\n§c* Você estará silenciado " + (punish.getReasona().getTime() > 0 ? "por mais §7" + Util.fromLong(punish.getExpire()) : "para sempre") +
+                            "\n\n§c* Motivo: " + reason + " - " + proof +
                             "\n§c* Autor: " + punish.getStafferName() +
                             "\n§c* Use o id §e#" + punish.getId() + " §cpara criar uma revisão em nosso forum §n§cvulcanth.com/forum" +
                             "\n"));
