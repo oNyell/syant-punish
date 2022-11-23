@@ -190,6 +190,7 @@ public class PunirCommand extends Commands {
                                     .addField("Duração:", reason.getTime() == 0 ? "Permanente" : Util.fromLongWithoutDiff(System.currentTimeMillis() + reason.getTime()), false)
                                     .addField("Expira em:", reason.getTime() == 0 ? "Nunca" : SDF.format(System.currentTimeMillis() + reason.getTime()), true)
                                     .addField("Provas:", proof, false)
+                                    .addField("Tipo:", reason.getPunishType().getText(), false)
                                     .addField("Staff:", sender.getName(), true)
                     );
 
