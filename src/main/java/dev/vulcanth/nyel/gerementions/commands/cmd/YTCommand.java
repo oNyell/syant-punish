@@ -33,7 +33,7 @@ public class YTCommand extends Commands {
                             yt.put(todos, todos.getName());
                             che = 1;
                         }
-                        if (todos.hasPermission("role.streamer") && che <= 0) {
+                        if (todos.hasPermission("role.streamer") && che == 0) {
                             streamer.put(todos, todos.getName());
                             boolean tags = true;
                         }

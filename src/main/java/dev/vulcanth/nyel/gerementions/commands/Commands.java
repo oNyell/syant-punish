@@ -20,11 +20,12 @@ public abstract class Commands extends Command {
         perform(sender, args);
     }
     public static void setupCommands() {
-        new DespunirCommand();
+        new CheckPunirCommand();
         new DespunirIDCommand();
         new KickCommand();
         new PunirCommand();
         new BanCommand();
         new YTCommand();
+        new RevogarCommand();
     }
 }

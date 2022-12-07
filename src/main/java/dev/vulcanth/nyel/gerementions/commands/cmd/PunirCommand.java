@@ -28,7 +28,7 @@ public class PunirCommand extends Commands {
     }
 
     private String webhookURL = "https://discord.com/api/webhooks/1005663639967121518/xlXHMJauZYeJNrac5XbVHiUt4S2mijPi4e_VdOmDLJ2_bXBjeU0aomZoq97YPF_XlA-B";
-    SimpleDateFormat SDF = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+    SimpleDateFormat SDF = new SimpleDateFormat("dd/MM/yyyy HH:mm");
     private static PunishDao punishDao;
 
     @Override
@@ -48,7 +48,6 @@ public class PunirCommand extends Commands {
             sender.sendMessage(TextComponent.fromLegacyText("§cUso incorreto, use /punir <player> e selecione o motivo."));
             return;
         }
-        ProxiedPlayer target = ProxyServer.getInstance().getPlayer(args[0]);
 
         if (args.length == 1) {
             String targetName = args[0];
@@ -62,14 +61,10 @@ public class PunirCommand extends Commands {
                 sender.sendMessage(TextComponent.fromLegacyText("§cVocê não pode punir este jogador."));
                 return;
             }
-            if (target == null) {
-                sender.sendMessage(TextComponent.fromLegacyText("§cEste usuário não se encontra online"));
-                return;
-            }
-            if (target.hasPermission("vulcanth.cmd.punir")) {
+            /*if (targetName.hasPermission("vulcanth.cmd.punir")) {
                 sender.sendMessage(TextComponent.fromLegacyText("§cVocê não pode punir um membro da equipe."));
                 return;
-            }
+            }*/
             sender.sendMessage(TextComponent.fromLegacyText("§aSelecione o motivo por qual você deseja punir " + Role.getColored(targetName) + "§f:"));
             sender.sendMessage(TextComponent.fromLegacyText(" "));
 
@@ -84,6 +79,9 @@ public class PunirCommand extends Commands {
 
                     switch (value.getPunishType()) {
                         case BAN:
+                        case KICK:
+                            rank = "§cAdmin";
+                            break;
                         case TEMPBAN:
                             rank = "§2Moderador";
                             break;
@@ -132,9 +130,11 @@ public class PunirCommand extends Commands {
                                     .setColor(Color.decode("#FFAA00"))
                                     .addField("Usuário:", targetName, true)
                                     .addField("Motivo:", reason.getText(), true)
-                                    .addField("Duração:", reason.getTime() == 0 ? "Permanente" : Util.fromLongWithoutDiff(System.currentTimeMillis() + reason.getTime()), false)
+                                    .addField("Duração:", reason.getTime() == 0 ? "Permanente" : Util.fromLongWithoutDiff(reason.getTime()), true)
+                                    .addField("Tipo:", reason.getPunishType().getText(), true)
                                     .addField("Expira em:", reason.getTime() == 0 ? "Nunca" : SDF.format(System.currentTimeMillis() + reason.getTime()), true)
                                     .addField("Provas:", "Nenhuma", true)
+                                    .addField("Staff:", sender.getName(), false)
                     );
 
                     try {
@@ -185,15 +185,14 @@ public class PunirCommand extends Commands {
                                     .setDescription("Um usuário foi punido do servidor.")
                                     .setThumbnail("https://mc-heads.net/avatar/" + targetName + "/500")
                                     .setColor(Color.decode("#FFAA00"))
-                                    .addField("Usuário:", targetName, false)
-                                    .addField("Motivo:", reason.getText(), false)
-                                    .addField("Duração:", reason.getTime() == 0 ? "Permanente" : Util.fromLongWithoutDiff(System.currentTimeMillis() + reason.getTime()), false)
+                                    .addField("Usuário:", targetName, true)
+                                    .addField("Motivo:", reason.getText(), true)
+                                    .addField("Duração:", reason.getTime() == 0 ? "Permanente" : Util.fromLongWithoutDiff(reason.getTime()), false)
+                                    .addField("Tipo:", reason.getPunishType().getText(), true)
                                     .addField("Expira em:", reason.getTime() == 0 ? "Nunca" : SDF.format(System.currentTimeMillis() + reason.getTime()), true)
-                                    .addField("Provas:", proof, false)
-                                    .addField("Tipo:", reason.getPunishType().getText(), false)
-                                    .addField("Staff:", sender.getName(), true)
+                                    .addField("Provas:", proof, true)
+                                    .addField("Staff:", sender.getName(), false)
                     );
-
                     try {
                         webhook.execute();
                     } catch (IOException e) {
@@ -234,6 +233,9 @@ public class PunirCommand extends Commands {
                 textString = "\n§c* " + punish.getPlayerName() + " §cfoi silenciado por §c" + staffer +
                         "\n§c* Motivo: " + reason.getText() + " - " + proof +
                         "\n§c* Duração: " + Util.fromLong(punish.getExpire());
+                break;
+            case KICK:
+                textString = "\n§c* " + punish.getPlayerName() + " §cfoi expulso por §c" + staffer + "\n";
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + reason.getPunishType());
@@ -277,6 +279,9 @@ public class PunirCommand extends Commands {
                         "\n§cDuração: Permanente" +
                         "\n§cID da punição: §e#" + punish.getId() +
                         "\n\n§cAcha que a punição foi aplicada injustamente?\n§cFaça uma revisão em nosso forum: §evulcanth.com/forum"));
+            }
+            if (reason.getPunishType() == PunishType.KICK) {
+                target.disconnect(TextComponent.fromLegacyText("§c§lVULCANTH\n\n§cVocê foi desconectado do servidor por " + staffer + "."));
             }
         }
     }

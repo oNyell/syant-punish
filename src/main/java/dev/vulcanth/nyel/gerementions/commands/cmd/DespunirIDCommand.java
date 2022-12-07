@@ -49,13 +49,13 @@ public class DespunirIDCommand extends Commands {
         }
         String playerName = punish.getPlayerName();
         punishDao.disablePunish(id);
-        TextComponent text = new TextComponent(TextComponent.fromLegacyText("§cO jogador " + Role.getPrefixed(playerName) + " §cacabou de ter sua punição revogada."));
+        TextComponent text = new TextComponent(TextComponent.fromLegacyText("§cO jogador " + playerName + " §cacabou de ter sua punição revogada."));
         text.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText("" + Role.getColored(playerName) +
                 "\n\n§fID: §e#" + punish.getId() +
                 "\n§fMotivo: §7" + punish.getReasona().getText() +
                 "\n§fTipo de punição: §7" + punish.getReasona().getPunishType().name().replace("TEMP", ""))));
 
-        sender.sendMessage(TextComponent.fromLegacyText("§aVocê despuniu o jogador " + playerName + "§a."));
+        sender.sendMessage(TextComponent.fromLegacyText("§aVocê revogou a punição do jogador " + playerName + "§a."));
         ProxyServer.getInstance().getPlayers().stream().filter(o -> o.hasPermission("vulcanth.cmd.punir")).forEach(o -> o.sendMessage(text));
 
     }
