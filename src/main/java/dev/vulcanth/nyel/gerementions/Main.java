@@ -26,6 +26,10 @@ public class Main extends Plugin {
 
     private PunishThread punishThread;
 
+    public Configuration getConfig() {
+        return config;
+    }
+
     @Override
     public void onEnable() {
         instance = this;
@@ -45,16 +49,14 @@ public class Main extends Plugin {
     }
 
     public void saveDefaultConfig() {
-        for (String fileName : new String[]{"config"}) {
-            File file = new File("plugins/VulcanthPunish/" + fileName + ".yml");
-            if (!file.exists()) {
-                copyFile(Main.getInstance().getResourceAsStream(fileName + ".yml"), file);
-            }
-            try {
-                this.config = YamlConfiguration.getProvider(YamlConfiguration.class).load(new InputStreamReader(Files.newInputStream(file.toPath()), StandardCharsets.UTF_8));
-            } catch (IOException ex) {
-                this.getLogger().log(Level.WARNING, "Cannot load " + fileName + ".yml: ", ex);
-            }
+        File file = new File("plugins/syant-punish/config.yml");
+        if (!file.exists()) {
+            copyFile(Main.getInstance().getResourceAsStream("config.yml"), file);
+        }
+        try {
+            this.config = YamlConfiguration.getProvider(YamlConfiguration.class).load(new InputStreamReader(Files.newInputStream(file.toPath()), StandardCharsets.UTF_8));
+        } catch (IOException ex) {
+            this.getLogger().log(Level.WARNING, "Cannot load config.yml: ", ex);
         }
     }
 
@@ -87,11 +89,6 @@ public class Main extends Plugin {
             }
         }
     }
-
-    public Configuration getConfig() {
-        return config;
-    }
-
 
     public void onDisable() {
         punishThread.shutdown();

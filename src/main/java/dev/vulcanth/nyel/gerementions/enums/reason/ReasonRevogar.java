@@ -1,21 +1,21 @@
 package dev.vulcanth.nyel.gerementions.enums.reason;
 
-import dev.vulcanth.nyel.gerementions.enums.punish.PunishType;
+import dev.vulcanth.nyel.gerementions.enums.punish.RevogarType;
 import lombok.Getter;
 
 @Getter
 public enum ReasonRevogar {
-    AJI("Aplicada ao jogador incorreto", PunishType.TEMPMUTE),
-    MPI("Motivo de punição incorreto", PunishType.TEMPMUTE),
-    PI("Prova incorreta", PunishType.TEMPMUTE),
-    PAI("Punição apliacada injustamente", PunishType.TEMPMUTE),
-    RA("Revisão aceita", PunishType.TEMPMUTE);
+    AJI("Aplicada ao jogador incorreto", RevogarType.ERRADA),
+    MPI("Motivo de punição incorreto", RevogarType.INCORRETO),
+    PI("Prova incorreta", RevogarType.PROVA),
+    PAI("Punição aplicada injustamente", RevogarType.APLICADA),
+    RA("Revisão aceita", RevogarType.ACEITA);
 
     private final String text;
-    private final PunishType punishType;
+    private final RevogarType punishType;
 
-    ReasonRevogar(String text, PunishType punishType) {
+    ReasonRevogar(String text, RevogarType revogarType) {
         this.text = text;
-        this.punishType = punishType;
+        this.punishType = revogarType;
     }
 }

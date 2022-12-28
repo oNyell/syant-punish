@@ -1,7 +1,7 @@
 package dev.vulcanth.nyel.gerementions.punish.dao;
 
-import dev.vulcanth.nyel.database.Database;
 import dev.vulcanth.nyel.gerementions.Main;
+import dev.vulcanth.nyel.gerementions.database.Database;
 import dev.vulcanth.nyel.gerementions.enums.punish.PunishType;
 import dev.vulcanth.nyel.gerementions.enums.reason.Reason;
 import dev.vulcanth.nyel.gerementions.punish.Punish;
@@ -44,8 +44,8 @@ public class PunishDao {
             punishService.create(punish);
             lastHourPunishes.add(punish);
             ProxiedPlayer target = null;
-            Database.getInstance().execute("INSERT INTO VulcanthCorePunish VALUES (?, ?, ?, ?, ?, ?, ?, ?)", punish.getId(), punish.getPlayerName(), punish.getStafferName(), punish.getReasona().getText(), punish.getType(), punish.getProof(), punish.getDate(), punish.getExpire());
-            //ReportsUtils.getReports().stream().filter(report -> report.getReported().equals(targetName)).forEach(report -> ReportsUtils.remove(target));
+            Database.getInstance().execute("INSERT INTO syant-punish VALUES (?, ?, ?, ?, ?, ?, ?, ?)", punish.getId(), punish.getPlayerName(), punish.getStafferName(), punish.getReasona().getText(), punish.getType(), punish.getProof(), punish.getDate(), punish.getExpire());
+            //ReportManagerBukkit.getReports().stream().filter(report -> report.getTarget().equals(targetName)).forEach(report -> ReportManagerBukkit.deleteReport(target.getName()));
         }, thread);
         return punish;
     }
@@ -54,7 +54,7 @@ public class PunishDao {
 
         CompletableFuture.runAsync(() -> {
             try {
-                PreparedStatement statement = Database.getInstance().getConnection().prepareStatement("SELECT * FROM `VulcanthCorePunish`;");
+                PreparedStatement statement = Database.getInstance().getConnection().prepareStatement("SELECT * FROM `syant-punish`;");
                 ResultSet resultSet = statement.executeQuery();
 
                 while (resultSet.next()) {
@@ -72,7 +72,7 @@ public class PunishDao {
 
     public void disablePunish(String id) {
         CompletableFuture.runAsync(() -> {
-            Database.getInstance().execute("DELETE FROM VulcanthCorePunish WHERE id = ?", id);
+            Database.getInstance().execute("DELETE FROM syant-punish WHERE id = ?", id);
             punishService.remove(id);
             Main.getInstance().getLogger().info("Punish #" + id + " deletado com sucesso");
         }, thread);

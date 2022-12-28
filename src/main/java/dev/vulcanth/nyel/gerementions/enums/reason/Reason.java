@@ -7,7 +7,8 @@ import java.util.concurrent.TimeUnit;
 
 @Getter
 public enum Reason {
-    AC("Zeus detection", PunishType.BAN, 0),
+
+    AC("AntiCheat", PunishType.BAN, 0),
     HACK("Hack", PunishType.BAN, 0),
     ABUSODEBUGS("Abuso de bugs", PunishType.TEMPBAN, TimeUnit.DAYS.toMillis(30)),
     ANTIJOGOGAME("Anti jogo (Game)", PunishType.TEMPBAN, TimeUnit.DAYS.toMillis(3)),

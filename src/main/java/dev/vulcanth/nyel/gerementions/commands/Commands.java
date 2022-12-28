@@ -25,7 +25,6 @@ public abstract class Commands extends Command {
         new KickCommand();
         new PunirCommand();
         new BanCommand();
-        new YTCommand();
         new RevogarCommand();
     }
 }

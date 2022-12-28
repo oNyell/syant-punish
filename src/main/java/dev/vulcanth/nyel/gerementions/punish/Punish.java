@@ -22,5 +22,4 @@ public class Punish {
         }
         return true;
     }
-
 }

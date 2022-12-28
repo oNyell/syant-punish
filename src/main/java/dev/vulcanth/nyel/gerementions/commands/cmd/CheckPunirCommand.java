@@ -2,11 +2,8 @@ package dev.vulcanth.nyel.gerementions.commands.cmd;
 
 import dev.vulcanth.nyel.gerementions.Main;
 import dev.vulcanth.nyel.gerementions.commands.Commands;
-import dev.vulcanth.nyel.gerementions.enums.reason.Reason;
-import dev.vulcanth.nyel.gerementions.enums.reason.ReasonRevogar;
+import dev.vulcanth.nyel.gerementions.punish.Punish;
 import dev.vulcanth.nyel.gerementions.punish.dao.PunishDao;
-import dev.vulcanth.nyel.gerementions.util.Util;
-import dev.vulcanth.nyel.player.role.Role;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -23,6 +20,7 @@ public class CheckPunirCommand extends Commands {
     }
 
     private static PunishDao punishDao;
+    private static Punish punish;
     SimpleDateFormat SDF = new SimpleDateFormat("dd/MM/yyyy 'às' HH:mm");
 
     @Override
@@ -53,25 +51,42 @@ public class CheckPunirCommand extends Commands {
         }
         String target = args[0];
 
-
-        player.sendMessage(TextComponent.fromLegacyText("§eRevogando punições do " + target + "§e:"));
-        player.sendMessage(TextComponent.fromLegacyText(" "));
-
-        if (punishDao.getPunishService().getPunishes().stream().anyMatch(punish -> punish.getPlayerName().equalsIgnoreCase(target))) {
-            punishDao.getPunishService().getPunishes().stream().filter(punish -> punish.getPlayerName().equalsIgnoreCase(target)).forEach(punish -> {
-
-                TextComponent text = new TextComponent("");
-                text.setText("§e§l[§e"+ SDF.format(punish.getDate()) + "§e§l] §e§l[§e" + punish.getReasona().getText() + "§e§l] ");
-                text.addExtra("§f§l[§fRevogar§f§l]");
-                text.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText("§eClique para revogar.")));
-                text.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/revogar " + target));
-                sender.sendMessage(text);
-            });
-        } else {
-            player.sendMessage(TextComponent.fromLegacyText("§fNenhuma."));
+        if (sender.hasPermission("syant.cmd.punir.helper")) {
+            if (punishDao.getPunishService().getPunishes().stream().anyMatch(punish -> punish.getPlayerName().equalsIgnoreCase(target))) {
+                punishDao.getPunishService().getPunishes().stream().filter(punish -> punish.getPlayerName().equalsIgnoreCase(target)).forEach(punish -> {
+                    sender.sendMessage(TextComponent.fromLegacyText("\n§cEste jogador está punido pelo motivo: " +  punish.getReasona().getText() + "\n§cModo de punição: " + punish.getReasona().getPunishType().getText() + "\n§cID da punição: " + punish.getId()));
+                });
+            } else {
+                sender.sendMessage(TextComponent.fromLegacyText("§fIndisponível."));
+            }
+        } else if (sender.hasPermission("role.coord") || !sender.hasPermission("syant.cmd.punir.helper")) {
+            if (punishDao.getPunishService().getPunishes().stream().anyMatch(punish -> punish.getPlayerName().equalsIgnoreCase(target))) {
+                punishDao.getPunishService().getPunishes().stream().filter(punish -> punish.getPlayerName().equalsIgnoreCase(target)).forEach(punish -> {
+                    String texto = "§e§l[§e"+ SDF.format(punish.getDate()) + "§e§l] §e§l[§e" + punish.getReasona().getText() + "§e§l] ";
+                    TextComponent text = new TextComponent(texto);
+                    text.addExtra("§f§l[§fRevogar§f§l]");
+                    text.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText("§eClique para revogar.")));
+                    text.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/revogar " + target));
+                    sender.sendMessage(text);
+                });
+            } else {
+                sender.sendMessage(TextComponent.fromLegacyText("\n§fJogador exemplar! Sem quaisquer punições ativas."));
+            }
+        } else if (punish.getStafferName().equals(player.getName()) || sender.hasPermission("syant.cmd.punir.helper") ) {
+            if (punishDao.getPunishService().getPunishes().stream().anyMatch(punish -> punish.getPlayerName().equalsIgnoreCase(target))) {
+                punishDao.getPunishService().getPunishes().stream().filter(punish -> punish.getPlayerName().equalsIgnoreCase(target)).forEach(punish -> {
+                    String texto = "\n§e§l[§e"+ SDF.format(punish.getDate()) + "§e§l] §e§l[§e" + punish.getReasona().getText() + "§e§l] ";
+                    TextComponent text = new TextComponent(texto);
+                    text.addExtra("§f§l[§fRevogar§f§l]");
+                    text.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText("§eClique para revogar.")));
+                    text.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/revogar " + target));
+                    sender.sendMessage(text);
+                });
+            } else {
+                sender.sendMessage(TextComponent.fromLegacyText("\n§fJogador exemplar! Sem quaisquer punições ativas."));
+            }
         }
         player.sendMessage(TextComponent.fromLegacyText(" "));
-
     }
 }
 

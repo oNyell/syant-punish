@@ -7,7 +7,6 @@ import dev.vulcanth.nyel.gerementions.enums.reason.Reason;
 import dev.vulcanth.nyel.gerementions.punish.Punish;
 import dev.vulcanth.nyel.gerementions.util.Util;
 import dev.vulcanth.nyel.gerementions.util.Webhook;
-import dev.vulcanth.nyel.player.role.Role;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -27,7 +26,7 @@ public class PunirCommand extends Commands {
         super("punir", "punish");
     }
 
-    private String webhookURL = "https://discord.com/api/webhooks/1005663639967121518/xlXHMJauZYeJNrac5XbVHiUt4S2mijPi4e_VdOmDLJ2_bXBjeU0aomZoq97YPF_XlA-B";
+    private String webhookURL = "https://discord.com/api/webhooks/1057495063304871976/QENHseh2b6JAPgCIciSI2w0w09TrkAPZojChPxI3Rx7LYdhBjkgQy5ul4X2sP_IKFzh2";
     SimpleDateFormat SDF = new SimpleDateFormat("dd/MM/yyyy HH:mm");
     private static PunishDao punishDao;
 
@@ -39,8 +38,8 @@ public class PunirCommand extends Commands {
         }
 
         ProxiedPlayer player = (ProxiedPlayer) sender;
-        if (!player.hasPermission("vulcanth.cmd.punir")) {
-            player.sendMessage(TextComponent.fromLegacyText("§cSomente Ajudante ou superior podem executar este comando."));
+        if (!player.hasPermission("syant.cmd.punir")) {
+            player.sendMessage(TextComponent.fromLegacyText("§cSomente Helper ou superior podem executar este comando."));
             return;
         }
 
@@ -52,7 +51,6 @@ public class PunirCommand extends Commands {
         if (args.length == 1) {
             String targetName = args[0];
 
-
             if (targetName.equals(sender.getName())) {
                 sender.sendMessage(TextComponent.fromLegacyText("§cVocê não pode se punir."));
                 return;
@@ -61,11 +59,7 @@ public class PunirCommand extends Commands {
                 sender.sendMessage(TextComponent.fromLegacyText("§cVocê não pode punir este jogador."));
                 return;
             }
-            /*if (targetName.hasPermission("vulcanth.cmd.punir")) {
-                sender.sendMessage(TextComponent.fromLegacyText("§cVocê não pode punir um membro da equipe."));
-                return;
-            }*/
-            sender.sendMessage(TextComponent.fromLegacyText("§aSelecione o motivo por qual você deseja punir " + Role.getColored(targetName) + "§f:"));
+            sender.sendMessage(TextComponent.fromLegacyText("§aSelecione o motivo por qual você deseja punir " + targetName + "§f:"));
             sender.sendMessage(TextComponent.fromLegacyText(" "));
 
             boolean a = true;
@@ -73,20 +67,20 @@ public class PunirCommand extends Commands {
             for (Reason value : Reason.values()) {
                 String punishType = value.getPunishType().name().replace("TEMP", "");
 
-                if (sender.hasPermission("vulcanth.punir." + punishType.toLowerCase())) {
+                if (sender.hasPermission("syant.punir." + punishType.toLowerCase())) {
                     TextComponent text = new TextComponent((a ? "§f" : "§7") + value.getText());
                     String rank;
 
                     switch (value.getPunishType()) {
                         case BAN:
                         case KICK:
-                            rank = "§cAdmin";
+                            rank = "§5Coordenador";
                             break;
                         case TEMPBAN:
                             rank = "§2Moderador";
                             break;
                         default:
-                            rank = "§eAjudante";
+                            rank = "§eHelper";
                             break;
                     }
                     text.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText("§e" + value.getText() +
@@ -118,7 +112,7 @@ public class PunirCommand extends Commands {
                 sender.sendMessage(TextComponent.fromLegacyText("§cVerifique se você deixou um espaço em branco extra no motivo."));
                 return;
             }
-            if (sender.hasPermission("role.admin")) {
+            if (sender.hasPermission("role.coord")) {
                 if (punishDao.getPunishService().getPunishes().stream().filter(punish -> punish.getPlayerName().equalsIgnoreCase(targetName)).filter(punish -> punish.getReasona() == reason).noneMatch(Punish::isLocked)) {
                     apply(punishDao.createPunish(targetName, sender.getName(), reason, null, reason.getPunishType().name()), ProxyServer.getInstance().getPlayer(targetName), sender.getName());
                     
@@ -127,7 +121,7 @@ public class PunirCommand extends Commands {
                             new Webhook.EmbedObject()
                                     .setDescription("Um usuário foi punido do servidor.")
                                     .setThumbnail("https://mc-heads.net/avatar/" + targetName + "/500")
-                                    .setColor(Color.decode("#FFAA00"))
+                                    .setColor(Color.decode("#00A8FF"))
                                     .addField("Usuário:", targetName, true)
                                     .addField("Motivo:", reason.getText(), true)
                                     .addField("Duração:", reason.getTime() == 0 ? "Permanente" : Util.fromLongWithoutDiff(reason.getTime()), true)
@@ -176,7 +170,7 @@ public class PunirCommand extends Commands {
                 }
             }
 
-            if (sender.hasPermission("vulcanth.punir." + reason.getPunishType().name().replace("TEMP", "").toLowerCase())) {
+            if (sender.hasPermission("syant.punir." + reason.getPunishType().name().replace("TEMP", "").toLowerCase())) {
                 if (punishDao.getPunishService().getPunishes().stream().filter(punish -> punish.getPlayerName().equalsIgnoreCase(targetName)).filter(punish -> punish.getReasona() == reason).noneMatch(Punish::isLocked)) {
                     apply(punishDao.createPunish(targetName, sender.getName(), reason, proof, reason.getPunishType().getText()), ProxyServer.getInstance().getPlayer(targetName), sender.getName());
                     Webhook webhook = new Webhook(webhookURL);
@@ -184,7 +178,7 @@ public class PunirCommand extends Commands {
                             new Webhook.EmbedObject()
                                     .setDescription("Um usuário foi punido do servidor.")
                                     .setThumbnail("https://mc-heads.net/avatar/" + targetName + "/500")
-                                    .setColor(Color.decode("#FFAA00"))
+                                    .setColor(Color.decode("#00A8FF"))
                                     .addField("Usuário:", targetName, true)
                                     .addField("Motivo:", reason.getText(), true)
                                     .addField("Duração:", reason.getTime() == 0 ? "Permanente" : Util.fromLongWithoutDiff(reason.getTime()), false)
@@ -215,22 +209,22 @@ public class PunirCommand extends Commands {
 
         switch (reason.getPunishType()) {
             case BAN:
-                textString = "§c* " + punish.getPlayerName() + " §cfoi banido por " + staffer+
+                textString = "§c* " + punish.getPlayerName() + " §cfoi banido por " + staffer +
                         "\n§c* Motivo: " + reason.getText() + " - " + proof +
                         "\n§c* Duração: Permanente\n";
                 break;
             case MUTE:
-                textString = "§c* " + punish.getPlayerName() + " §cfoi silenciado por §c" + staffer +
+                textString = "§c* " + punish.getPlayerName() + " §cfoi silenciado por " + staffer +
                         "\n§c* Motivo: " + reason.getText() + " - " + proof +
                         "\n§c* Duração: Permanente\n";
                 break;
             case TEMPBAN:
-                textString = "§c* " + punish.getPlayerName() + " §cfoi banido por §c" + staffer +
+                textString = "§c* " + punish.getPlayerName() + " §cfoi banido por " + staffer +
                         "\n§c* Motivo:" + reason.getText() + " - " + proof +
                         "\n§c* Duração: " + Util.fromLong(punish.getExpire());
                 break;
             case TEMPMUTE:
-                textString = "\n§c* " + punish.getPlayerName() + " §cfoi silenciado por §c" + staffer +
+                textString = "\n§c* " + punish.getPlayerName() + " §cfoi silenciado por " + staffer +
                         "\n§c* Motivo: " + reason.getText() + " - " + proof +
                         "\n§c* Duração: " + Util.fromLong(punish.getExpire());
                 break;
@@ -243,8 +237,8 @@ public class PunirCommand extends Commands {
         final TextComponent text = new TextComponent(textString);
         text.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, proof));
 
-        /*if (ReportsUtils.getReports().stream().anyMatch(report -> report.getReported().equalsIgnoreCase(punish.getPlayerName()))) {
-            ReportsUtils.getReports().stream().filter(report -> report.getReported().equalsIgnoreCase(punish.getPlayerName())).map(ReportsUtils::getReported).forEach(s -> {
+        /*if (ReportManagerBukkit.getReports().stream().anyMatch(report -> report.getTarget().equalsIgnoreCase(punish.getPlayerName()))) {
+            ReportManagerBukkit.getReports().stream().filter(report -> report.getTarget().equalsIgnoreCase(punish.getPlayerName())).map(ReportManagerBukkit::getAccuser).forEach(s -> {
                 ProxiedPlayer proxiedPlayer = ProxyServer.getInstance().getPlayer(s);
 
                 if (proxiedPlayer != null) {
@@ -255,7 +249,7 @@ public class PunirCommand extends Commands {
                 }
             });
         }*/
-        ProxyServer.getInstance().getPlayers().stream().filter(o -> o.hasPermission("vulcanth.cmd.punir")).forEach(o -> {
+        ProxyServer.getInstance().getPlayers().stream().filter(o -> o.hasPermission("syant.cmd.punir")).forEach(o -> {
             o.sendMessage(TextComponent.fromLegacyText(" "));
             o.sendMessage(text);
             o.sendMessage(TextComponent.fromLegacyText(" "));
@@ -266,22 +260,19 @@ public class PunirCommand extends Commands {
             target.sendMessage(TextComponent.fromLegacyText(" "));
 
             if (reason.getPunishType() == PunishType.TEMPBAN) {
-                target.disconnect(TextComponent.fromLegacyText("§c§lVULCANTH\n\n§cVocê foi banido da rede\n" +
+                target.disconnect(TextComponent.fromLegacyText("§c§lSYANT\n\n§cVocê foi banido da rede\n" +
                         "\n§cMotivo: " + reason.getText() + " - " + proof +
                         "\n§cDuração: " + Util.fromLong(punish.getExpire()) +
                         "\n§cID da punição: §e#" + punish.getId() +
-                        "\n\n§cAcha que a punição foi aplicada injustamente?\n§cFaça uma revisão em nosso forum: §evulcanth.com/forum"));
+                        "\n\n§cAcha que a punição foi aplicada injustamente?\n§cFaça uma revisão em nosso forum: §esyantmc.com/forum"));
                 return;
             }
             if (reason.getPunishType() == PunishType.BAN) {
-                target.disconnect(TextComponent.fromLegacyText("§c§lVULCANTH\n\n§cVocê foi banido da rede\n" +
+                target.disconnect(TextComponent.fromLegacyText("§c§lSYANT\n\n§cVocê foi banido da rede\n" +
                         "\n§cMotivo: " + reason.getText() + " - " + proof +
                         "\n§cDuração: Permanente" +
                         "\n§cID da punição: §e#" + punish.getId() +
-                        "\n\n§cAcha que a punição foi aplicada injustamente?\n§cFaça uma revisão em nosso forum: §evulcanth.com/forum"));
-            }
-            if (reason.getPunishType() == PunishType.KICK) {
-                target.disconnect(TextComponent.fromLegacyText("§c§lVULCANTH\n\n§cVocê foi desconectado do servidor por " + staffer + "."));
+                        "\n\n§cAcha que a punição foi aplicada injustamente?\n§cFaça uma revisão em: §esyantmc.com/forum"));
             }
         }
     }
@@ -291,7 +282,7 @@ public class PunirCommand extends Commands {
     }
 
     private static boolean impossibleToBan(String nickName) {
-        return Stream.of("NyellPlay", "_ImZaskie_").anyMatch(s -> s.equalsIgnoreCase(nickName));
+        return Stream.of("oNyell").anyMatch(s -> s.equalsIgnoreCase(nickName));
     }
 }
 

@@ -1,10 +1,10 @@
 package dev.vulcanth.nyel.gerementions.commands.cmd;
 
+import dev.syantmc.pewd.player.role.Role;
 import dev.vulcanth.nyel.gerementions.Main;
 import dev.vulcanth.nyel.gerementions.commands.Commands;
 import dev.vulcanth.nyel.gerementions.punish.Punish;
 import dev.vulcanth.nyel.gerementions.punish.dao.PunishDao;
-import dev.vulcanth.nyel.player.role.Role;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -31,7 +31,7 @@ public class DespunirIDCommand extends Commands {
         }
 
         ProxiedPlayer player = (ProxiedPlayer) sender;
-        if (!player.hasPermission("role.gerente")) {
+        if (!player.hasPermission("role.coord")) {
             player.sendMessage(TextComponent.fromLegacyText("§fComando desconhecido."));
             return;
         }
@@ -56,7 +56,7 @@ public class DespunirIDCommand extends Commands {
                 "\n§fTipo de punição: §7" + punish.getReasona().getPunishType().name().replace("TEMP", ""))));
 
         sender.sendMessage(TextComponent.fromLegacyText("§aVocê revogou a punição do jogador " + playerName + "§a."));
-        ProxyServer.getInstance().getPlayers().stream().filter(o -> o.hasPermission("vulcanth.cmd.punir")).forEach(o -> o.sendMessage(text));
+        ProxyServer.getInstance().getPlayers().stream().filter(o -> o.hasPermission("role.coord")).forEach(o -> o.sendMessage(text));
 
     }
     static {

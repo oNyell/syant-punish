@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="syant-punish">
+    <output-path>$USER_HOME$/Desktop/syant-plugins/syant-punish</output-path>
+    <root id="archive" name="syant-punish.jar">
+      <element id="module-output" name="syant-punish" />
+    </root>
+  </artifact>
+</component>
